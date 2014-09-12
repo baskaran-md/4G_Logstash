@@ -1,0 +1,44 @@
+input {
+  tcp {
+    port => 5000
+    type => microkernel_log
+  }
+  udp {
+    port => 5000
+    type => microkernel_log
+  }
+}
+
+filter {
+
+  multiline {
+    pattern => "^\s"
+    what => "previous"
+  }
+
+  multiline {
+    pattern => "^$"
+    what => "previous"
+  }
+
+  if [type] == "microkernel_log" {
+
+    grok {
+      match => [ 
+        "message", "%{DATESTAMP:timestamp} org:%{WORD:organization} env:%{WORD:environment} api:%{WORD:apiproxy} rev:%{INT:revision} policy:%{WORD:policy} %{GREEDYDATA:4glogs}", 
+        "message", "%{DATESTAMP:timestamp} env:%{WORD:environment} api:%{WORD:apiproxy} rev:%{INT:revision} policy:%{WORD:policy} %{GREEDYDATA:4glogs}" ]
+      add_tag => "msg_type2"
+    }
+  }
+
+    syslog_pri { }
+    date {
+      match => [ "timestamp", "yyyy-mm-dd HH:mm:ss,Z", "yyyy-mm-dd HH:mm:ss,Z" ]
+    }
+  }
+}
+
+output {
+  elasticsearch { host => localhost }
+  stdout { codec => rubydebug }
+}
