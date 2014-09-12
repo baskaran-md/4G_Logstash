@@ -24,17 +24,17 @@ filter {
   if [type] == "microkernel_log" {
 
     grok {
-      match => [ 
+      match => [
         "message", "%{DATESTAMP:timestamp} org:%{WORD:organization} env:%{WORD:environment} api:%{WORD:apiproxy} rev:%{INT:revision} policy:%{WORD:policy} %{GREEDYDATA:4glogs}", 
-        "message", "%{DATESTAMP:timestamp} env:%{WORD:environment} api:%{WORD:apiproxy} rev:%{INT:revision} policy:%{WORD:policy} %{GREEDYDATA:4glogs}" ]
+        "message", "%{DATESTAMP:timestamp} env:%{WORD:environment} api:%{WORD:apiproxy} rev:%{INT:revision} policy:%{WORD:policy} %{GREEDYDATA:4glogs}" 
+      ]
       add_tag => "msg_type2"
+      overwrite => [ "message" ]
     }
   }
 
-    syslog_pri { }
-    date {
-      match => [ "timestamp", "yyyy-mm-dd HH:mm:ss,Z", "yyyy-mm-dd HH:mm:ss,Z" ]
-    }
+  date {
+     match => [ "timestamp", "yyyy-mm-dd HH:mm:ss,SSS" ]
   }
 }
 
