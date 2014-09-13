@@ -1,0 +1,39 @@
+input {
+  tcp {
+    port => 5000
+    type => microkernel_log
+    codec => multiline {
+       patterns_dir => "./patterns"
+       pattern => "^%{4G_DATESTAMP}"
+       negate => true
+       what => previous
+    }
+  }
+  udp {
+    port => 5000
+    type => microkernel_log
+  }
+}
+
+filter {
+
+  if [type] == "microkernel_log" {
+
+    grok {
+      patterns_dir => "./patterns"
+      match => [
+        "message", "%{4G_DATESTAMP:timestamp}%{SPACE}org:%{WORD:organization}%{SPACE}env:%{WORD:environment}%{SPACE}api:%{WORD:apiproxy}%{SPACE}rev:%{INT:revision}%{SPACE}policy:%{WORD:policy}%{SPACE}%{NOTSPACE:thread}%{SPACE}%{LOGLEVEL:loglevel}%{SPACE}%{JAVACLASS:clazz}%{SPACE}%{GREEDYDATA:4glogs}"
+      ]
+      overwrite => [ "message" ]
+    }
+  }
+
+  date {
+     match => [ "timestamp", "yyyy-MM-dd HH:mm:ss,SSS" ]
+  }
+}
+
+output {
+  elasticsearch { host => localhost }
+  stdout { codec => rubydebug }
+}
