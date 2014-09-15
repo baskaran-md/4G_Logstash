@@ -51,6 +51,13 @@ filter {
 
   date {
      match => [ "timestamp", "yyyy-MM-dd HH:mm:ss,SSS" ]
+     timezone => "Etc/GMT+4"
+  }
+
+  if "multiline" in [tags] {
+    mutate {
+      replace => [ "tags", "stacktrace" ]
+    }
   }
 }
 
