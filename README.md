@@ -1,4 +1,4 @@
 4G Logstash
 ===========
 
-LogStash Configurations parsing for 4G Logs
+LogStash Configurations for parsing 4G Logs
