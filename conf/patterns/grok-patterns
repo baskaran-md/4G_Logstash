@@ -1,3 +1,4 @@
 # yyyy-MM-dd HH:mm:ss,SSS eg: 2014-20-12 21:20:14,527
 4G_DATESTAMP 20%{YEAR}-%{MONTHNUM}-%{MONTHDAY}%{SPACE}%{HOUR}:?%{MINUTE}(?::?%{SECOND})
 4G_LOGLEVEL (ALERT|TRACE|DEBUG|NOTICE|INFO|WARN?(?:ING)?|ERR?(?:OR)?|CRIT?(?:ICAL)?|FATAL|SEVERE|EMERG(?:ENCY)?)
+4G_PROFILE (management-server|message-processor|router|router-netty)

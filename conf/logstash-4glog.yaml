@@ -1,17 +1,17 @@
 input {
   tcp {
     port => 5000
-    type => microkernel_log
+    type => systel_log
   }
   udp {
     port => 5000
-    type => microkernel_log
+    type => systel_log
   }
 }
 
 filter {
 
-  if [type] == "microkernel_log" {
+  if [type] == "systel_log" {
 
     multiline {
        patterns_dir => "./patterns"
@@ -24,13 +24,13 @@ filter {
       patterns_dir => "./patterns"
       match => [
         #Parsing Raw Logs
-        "message", "(?m)%{4G_DATESTAMP:timestamp}(%{SPACE}org:%{WORD:organization})?(%{SPACE}env:%{WORD:environment})?(%{SPACE}api:%{WORD:apiproxy})?(%{SPACE}rev:%{INT:revision})?(%{SPACE}policy:%{WORD:policy})?%{SPACE}%{DATA:thread}(%{SPACE}-%{SPACE}%{URIPATHPARAM:request})?%{SPACE}%{4G_LOGLEVEL:loglevel}(%{SPACE}%{NOTSPACE:logger})?%{SPACE}(-)?%{SPACE}%{GREEDYDATA:4glogs}",
+        "message", "(?m)%{4G_DATESTAMP:timestamp}(%{SPACE}%{IPV4:host})?(%{SPACE}%{4G_PROFILE:profile})?(%{SPACE}org:%{WORD:organization})?(%{SPACE}env:%{WORD:environment})?(%{SPACE}api:%{WORD:apiproxy})?(%{SPACE}rev:%{INT:revision})?(%{SPACE}policy:%{WORD:policy})?%{SPACE}%{DATA:thread}(%{SPACE}-%{SPACE}%{URIPATHPARAM:request})?%{SPACE}%{4G_LOGLEVEL:loglevel}(%{SPACE}%{NOTSPACE:logger})?%{SPACE}(-)?%{SPACE}%{GREEDYDATA:4glogs}",
 
         #Catch All
         "message", "(?m)%{4G_DATESTAMP:timestamp}%{SPACE}%{GREEDYDATA:4glogs}"
 
       ]
-      overwrite => [ "message" ]
+      overwrite => [ "host" ]
     }
   }
 
