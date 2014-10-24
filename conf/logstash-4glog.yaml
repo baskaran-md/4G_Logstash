@@ -27,7 +27,7 @@ filter {
         "message", "(?m)%{4G_DATESTAMP:timestamp}(%{SPACE}%{IPV4:host})?(%{SPACE}%{4G_PROFILE:profile})?(%{SPACE}org:%{WORD:organization})?(%{SPACE}env:%{WORD:environment})?(%{SPACE}api:%{WORD:apiproxy})?(%{SPACE}rev:%{INT:revision})?(%{SPACE}policy:%{WORD:policy})?%{SPACE}%{DATA:thread}(%{SPACE}-%{SPACE}%{URIPATHPARAM:request})?%{SPACE}%{4G_LOGLEVEL:loglevel}(%{SPACE}%{NOTSPACE:logger})?%{SPACE}(-)?%{SPACE}%{GREEDYDATA:4glogs}",
 
         #Catch All
-        "message", "(?m)%{4G_DATESTAMP:timestamp}%{SPACE}%{GREEDYDATA:4glogs}"
+        "message", "(?m)%{4G_DATESTAMP:timestamp}%{SPACE}%{GREEDYDATA:4glogs_C22}"
 
       ]
       overwrite => [ "host" ]
@@ -47,6 +47,6 @@ filter {
 }
 
 output {
-  elasticsearch { host => localhost }
-  stdout { codec => rubydebug }
+   elasticsearch { host => localhost }
+#  stdout { codec => rubydebug }
 }
