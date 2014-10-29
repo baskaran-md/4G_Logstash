@@ -1,17 +1,15 @@
 input {
-  tcp {
+  lumberjack {
     port => 5000
-    type => systel_log
-  }
-  udp {
-    port => 5000
-    type => systel_log
+    type => "system_log"
+    ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+    ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
   }
 }
 
 filter {
 
-  if [type] == "systel_log" {
+  if [type] == "system_log" {
 
     multiline {
        patterns_dir => "./patterns"
