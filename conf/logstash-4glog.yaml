@@ -22,19 +22,27 @@ filter {
       patterns_dir => "./patterns"
       match => [
         #Parsing Raw Logs
-        "message", "(?m)%{4G_DATESTAMP:timestamp}(%{SPACE}%{IPV4:host})?(%{SPACE}%{4G_PROFILE:profile})?(%{SPACE}org:%{WORD:organization})?(%{SPACE}env:%{WORD:environment})?(%{SPACE}api:%{WORD:apiproxy})?(%{SPACE}rev:%{INT:revision})?(%{SPACE}policy:%{WORD:policy})?%{SPACE}%{DATA:thread}(%{SPACE}-%{SPACE}%{URIPATHPARAM:request})?%{SPACE}%{4G_LOGLEVEL:loglevel}(%{SPACE}%{NOTSPACE:logger})?%{SPACE}(-)?%{SPACE}%{GREEDYDATA:4glogs}",
+        "message", "(?m)%{4G_DATESTAMP:timestamp}(%{SPACE}%{IPV4:host})?(%{SPACE}%{4G_PROFILE:profile})?(%{SPACE}org:%{WORD:organization})?(%{SPACE}env:%{WORD:environment})?(%{SPACE}api:%{WORD:apiproxy})?(%{SPACE}rev:%{INT:revision})?(%{SPACE}policy:%{WORD:policy})?%{SPACE}%{DATA:thread}(%{SPACE}-%{SPACE}%{URIPATHPARAM:request})?%{SPACE}%{4G_LOGLEVEL:loglevel}(%{SPACE}%{NOTSPACE:logger})?%{SPACE}(-)?%{SPACE}%{GREEDYDATA:message}",
 
         #Catch All
         "message", "(?m)%{4G_DATESTAMP:timestamp}%{SPACE}%{GREEDYDATA:4glogs_C22}"
-
       ]
+
+      #Overwrite Host
       overwrite => [ "host" ]
+
+      #Overwrite Complete Message - Removes Timestamp,host,profile and other index'ed informations
+      overwrite => [ "message" ]
     }
   }
 
   date {
      match => [ "timestamp", "yyyy-MM-dd HH:mm:ss,SSS" ]
-     timezone => "Etc/GMT+4"
+     timezone => "PST8PDT"
+  }
+
+  mutate {
+    remove => [ "timestamp" ]  # Removes the 'timestamp' field
   }
 
   if "multiline" in [tags] {
@@ -45,6 +53,6 @@ filter {
 }
 
 output {
-   elasticsearch { host => localhost }
-#  stdout { codec => rubydebug }
+  elasticsearch { host => localhost }
+  #stdout { codec => rubydebug }
 }
