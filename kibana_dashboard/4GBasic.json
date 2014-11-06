@@ -1,5 +1,5 @@
 {
-  "title": "4GBasic",
+  "title": "4G_Logstash",
   "services": {
     "query": {
       "list": {
@@ -131,7 +131,7 @@
       "panels": [
         {
           "error": false,
-          "span": 5,
+          "span": 9,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -160,44 +160,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "Host"
+          "title": "Events by Host"
         },
         {
           "error": false,
-          "span": 5,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "organization",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 6,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": true,
-          "labels": true,
-          "arrangement": "vertical",
-          "chart": "bar",
-          "counter_pos": "below",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "Org"
-        },
-        {
-          "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -226,7 +193,40 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "NPE"
+          "title": "Events By Profile"
+        },
+        {
+          "error": false,
+          "span": 12,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "logger",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 20,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "bar",
+          "counter_pos": "below",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "Events by LOGGER Type"
         }
       ],
       "notice": false
@@ -247,8 +247,8 @@
             "default"
           ],
           "type": "table",
-          "size": 100,
-          "pages": 5,
+          "size": 50,
+          "pages": 10,
           "offset": 0,
           "sort": [
             "@timestamp",
@@ -258,10 +258,18 @@
             "font-size": "9pt"
           },
           "overflow": "min-height",
-          "fields": [],
+          "fields": [
+            "host",
+            "profile",
+            "logger",
+            "thread",
+            "message"
+          ],
           "localTime": true,
           "timeField": "@timestamp",
-          "highlight": [],
+          "highlight": [
+            "logger"
+          ],
           "sortable": true,
           "header": true,
           "paging": true,
@@ -276,7 +284,7 @@
           "status": "Stable",
           "trimFactor": 300,
           "normTimes": true,
-          "all_fields": false
+          "all_fields": true
         }
       ],
       "notice": false
@@ -301,15 +309,23 @@
       "pinned": true,
       "history": [
         "",
-        "java.lang.NullPointerException"
+        "java.lang.NullPointerException and \"management-server\"",
+        "java.lang.NullPointerException \"management-server\"",
+        "java.lang.NullPointerException AND \"management-server\"",
+        "java.lang.NullPointerException AND \"profile: management-server\"",
+        "java.lang.NullPointerException",
+        "profile: router",
+        "profile: message-processor",
+        "\"10.141.11.84\"",
+        "\"10.141.11.83\""
       ],
       "remember": 10,
       "enable": true
     },
     {
       "type": "filtering",
-      "collapse": true,
-      "notice": false,
+      "collapse": false,
+      "notice": true,
       "enable": true
     }
   ],
