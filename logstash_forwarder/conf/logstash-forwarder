@@ -1,7 +1,7 @@
 {
   "network": {
     "servers": [ "SERVER:5000" ],
-    "timeout": 15,
+    "timeout": 600,
     "ssl ca": "/etc/pki/tls/certs/logstash-forwarder.crt"
   },
   "files": [
